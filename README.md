@@ -21,6 +21,8 @@ Install OpenZeppelin dependencies:
 
 ```bash
 npm install @openzeppelin/contracts
+```
+
 
 🔗 Deployed Contracts
 All contracts are deployed and verified:

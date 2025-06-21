@@ -1,82 +1,60 @@
 # 🌀 SimpleSwap
 
-## Overview
+**SimpleSwap** is a lightweight Automated Market Maker (AMM) smart contract, inspired by [Uniswap V2](https://uniswap.org/), written in Solidity. It enables token swaps, liquidity provision, and LP token management between two ERC20 tokens.
 
-**SimpleSwap** is a lightweight decentralized exchange (DEX) smart contract written in Solidity that replicates core features of Uniswap V2, enabling token swaps and liquidity management without relying on external protocols.
+## ✨ Features
 
-This project was developed as part of the ETHEKIPU learning program to deepen understanding of AMM-based liquidity pools and decentralized token exchange mechanics.
+- ERC20 ↔ ERC20 token swaps using constant product formula
+- Liquidity provision and redemption with internal LP tokens (`Liquidity Token`, symbol: `LQT`)
+- Real-time reserve and price tracking
+- Slippage protection and deadline handling
+- Fully on-chain, no external oracles
 
----
+## 📦 Requirements
 
-## 🧠 Features
+- Solidity `^0.8.0`
+- [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
 
-- ✅ Add liquidity to any ERC-20 token pair
-- ✅ Remove liquidity and withdraw proportional assets
-- ✅ Swap one token for another based on pool reserves
-- ✅ View real-time price of one token relative to another
-- ✅ Estimate output amount for swaps
+## 🛠 Installation
 
----
+Install OpenZeppelin dependencies:
 
-## 📄 Contract Functions
+```bash
+npm install @openzeppelin/contracts
 
-### `addLiquidity(...)`
-Adds liquidity to a token pair pool, minting liquidity tokens.
+🔗 Deployed Contracts
+All contracts are deployed and verified:
 
-### `removeLiquidity(...)`
-Removes liquidity from a pool, burning liquidity tokens and returning underlying assets.
+Contract	Address
+Token A	0x06B27208fA66d387633EfBe628f02a15d6608A1F
+Token B	0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99
+SimpleSwap	0xD4c51Fb24A1Fa0d68241a58b9AF623d60313Fbbd
 
-### `swapExactTokensForTokens(...)`
-Swaps an exact amount of one token for the calculated amount of another token.
+🧪 Core Functions
+addLiquidity(...)
+Adds liquidity to the pool using both tokens. Mints LP tokens proportional to the contribution.
 
-### `getPrice(...)`
-Returns the spot price of one token in terms of another, based on pool reserves.
+removeLiquidity(...)
+Burns LP tokens and returns the underlying tokens to the user.
 
-### `getAmountOut(...)`
-Calculates how much output you'd receive when swapping a given amount in.
+swapExactTokensForTokens(...)
+Swaps a fixed amount of one token for the other based on reserves.
 
----
+getAmountOut(...)
+Calculates the output token amount using the constant product formula.
 
-## 🔧 Technologies Used
+getPrice(...)
+Returns the current token price between tokenA and tokenB.
 
-- **Solidity** `^0.8.0`
-- **OpenZeppelin Contracts** for safe ERC-20 token operations
-- **Math utilities** for liquidity and price calculations
+getReserves()
+Returns current reserve balances.
 
----
+🧾 Example Usage
 
-## 🧪 Usage & Deployment
+SimpleSwap pool = new SimpleSwap(address(tokenA), address(tokenB));
+pool.addLiquidity(...);
+pool.swapExactTokensForTokens(...);
 
-1. Compile the contract using [Remix](https://remix.ethereum.org/) or Hardhat.
-2. Deploy it to a local testnet or a public testnet (e.g., Sepolia).
-3. Interact using tools like Remix, Etherscan, or a front-end DApp interface.
-4. Make sure tokens are approved before calling `addLiquidity` or `swapExactTokensForTokens`.
-
----
-
-## 📁 File Structure
-
-📦SimpleSwap
-┣ 📄SimpleSwap.sol
-┗ 📄TokenA.sol
-┗ 📄TokenB.sol
-┗ 📄README.md
-
-
----
-
-## 🧾 Autor
-
-Walter Liendo ( walter.liendo@gmail.com )
-
-## 🧾 License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
----
-
-## 🙌 Acknowledgements
-
-Built as part of the **ETHEKIPU** program. Inspired by [Uniswap V2 Docs](https://docs.uniswap.org/contracts/v2/reference/smart-contracts/router-02).
-
----
+👨‍💻 Author
+Developed by Walter Liendo
+Licensed under the MIT License

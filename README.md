@@ -1,32 +1,29 @@
 # 🌀 SimpleSwap
 
-**SimpleSwap** is a lightweight Automated Market Maker (AMM) smart contract, inspired by [Uniswap V2](https://uniswap.org/), written in Solidity. It enables token swaps, liquidity provision, and LP token management between two ERC20 tokens.
+**SimpleSwap** is a minimalistic Automated Market Maker (AMM) smart contract, inspired by [Uniswap V2](https://uniswap.org/), and written in Solidity. It enables token swaps, liquidity provisioning, and LP token minting between two ERC20 tokens with a constant product formula.
+
+---
 
 ## ✨ Features
 
-- ERC20 ↔ ERC20 token swaps using constant product formula
-- Liquidity provision and redemption with internal LP tokens (`Liquidity Token`, symbol: `LQT`)
-- Real-time reserve and price tracking
-- Slippage protection and deadline handling
-- Fully on-chain, no external oracles
+- 🔁 **ERC20-to-ERC20 swaps** based on x * y = k formula
+- 💧 **Liquidity provision and redemption** with internal LP tokens (`Liquidity Token`, symbol: `LQT`)
+- 📈 **Live reserve tracking** and token pricing
+- ⚠️ **Slippage control** and transaction deadline handling
+- 🔒 **Fully on-chain**, no need for oracles
+
+---
 
 ## 📦 Requirements
 
-- Solidity `^0.8.0`
-- [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
+- `Solidity ^0.8.0`
+- [`@openzeppelin/contracts`](https://github.com/OpenZeppelin/openzeppelin-contracts)
 
-## 🛠 Installation
-
-Install OpenZeppelin dependencies:
+Install dependencies:
 
 ```bash
 npm install @openzeppelin/contracts
-```
-
-
-🔗 Deployed Contracts
-All contracts are deployed and verified:
-
+🔗 Deployed Contracts (Verified)
 Contract	Address
 Token A	0x06B27208fA66d387633EfBe628f02a15d6608A1F
 Token B	0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99
@@ -34,29 +31,48 @@ SimpleSwap	0xD4c51Fb24A1Fa0d68241a58b9AF623d60313Fbbd
 
 🧪 Core Functions
 addLiquidity(...)
-Adds liquidity to the pool using both tokens. Mints LP tokens proportional to the contribution.
+📥 Adds liquidity using both tokens. Mints LP tokens proportional to the deposit. Slippage protection with amountAMin and amountBMin.
 
 removeLiquidity(...)
-Burns LP tokens and returns the underlying tokens to the user.
+📤 Burns LP tokens and returns the proportional amounts of both tokens. Enforces minimum output thresholds.
 
 swapExactTokensForTokens(...)
-Swaps a fixed amount of one token for the other based on reserves.
+🔄 Swaps an exact input amount of one token for the maximum possible output of the other.
 
 getAmountOut(...)
-Calculates the output token amount using the constant product formula.
+📊 Calculates the output token amount using the constant product formula.
 
 getPrice(...)
-Returns the current token price between tokenA and tokenB.
+💱 Returns the current price between tokenA and tokenB, normalized to 18 decimals.
 
 getReserves()
-Returns current reserve balances.
+📦 Retrieves current token reserves.
 
 🧾 Example Usage
-
+solidity
+Copiar
+Editar
 SimpleSwap pool = new SimpleSwap(address(tokenA), address(tokenB));
-pool.addLiquidity(...);
-pool.swapExactTokensForTokens(...);
 
+pool.addLiquidity(
+    address(tokenA),
+    address(tokenB),
+    1000 ether,
+    1000 ether,
+    900 ether,
+    900 ether,
+    msg.sender,
+    block.timestamp + 300
+);
+
+pool.swapExactTokensForTokens(
+    100 ether,
+    90 ether,
+    new address  { tokenA, tokenB },
+    msg.sender,
+    block.timestamp + 300
+);
 👨‍💻 Author
 Developed by Walter Liendo
-Licensed under the MIT License
+📄 Licensed under the MIT License
+

@@ -1,100 +1,92 @@
-# 🌀 SimpleSwap
 
-**SimpleSwap** is a minimalistic Automated Market Maker (AMM) smart contract, inspired by [Uniswap V2](https://uniswap.org/), and written in Solidity. It enables token swaps, liquidity provisioning, and LP token minting between two ERC20 tokens with a constant product formula.
+# 🦄 SimpleSwap Smart Contract
 
----
+This project implements a basic decentralized exchange (DEX) smart contract similar to Uniswap V2. It allows users to:
 
-## ✨ Features
+- Add liquidity to a token pair
+- Remove liquidity
+- Swap tokens with constant product formula
+- Query prices and estimated output amounts
 
-* 🔁 **ERC20-to-ERC20 swaps** based on x \* y = k formula
-* 💧 **Liquidity provision and redemption** with internal LP tokens (`Liquidity Token`, symbol: `LQT`)
-* 📈 **Live reserve tracking** and token pricing
-* ⚠️ **Slippage control** and transaction deadline handling
-* 🔒 **Fully on-chain**, no need for oracles
+## 🚀 Contracts Deployed on Sepolia
 
----
+- **Token A (TKA)**  
+  [`0x06B27208fA66d387633EfBe628f02a15d6608A1F`](https://sepolia.etherscan.io/address/0x06B27208fA66d387633EfBe628f02a15d6608A1F)
 
-## 📦 Requirements
+- **Token B (TKB)**  
+  [`0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99`](https://sepolia.etherscan.io/address/0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99)
 
-* `Solidity ^0.8.0`
-* [`@openzeppelin/contracts`](https://github.com/OpenZeppelin/openzeppelin-contracts)
-
-Install dependencies:
-
-```bash
-npm install @openzeppelin/contracts
-```
+- **SimpleSwap**  
+  [`0x3F5C540D9087f4C95Ca6264B65A170353d2Ab03D`](https://sepolia.etherscan.io/address/0x3F5C540D9087f4C95Ca6264B65A170353d2Ab03D)
 
 ---
 
-## 🔗 Deployed Contracts (Verified)
+## 🛠 Features
 
-| Contract       | Address                                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **Token A**    | [`0x06B27208fA66d387633EfBe628f02a15d6608A1F`](https://sepolia.etherscan.io/address/0x06B27208fA66d387633EfBe628f02a15d6608A1F) |
-| **Token B**    | [`0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99`](https://sepolia.etherscan.io/address/0xeC6CDbB141aEc0C981c0E5e4a825227E412f7B99) |
-| **SimpleSwap** | [`0xD4c51Fb24A1Fa0d68241a58b9AF623d60313Fbbd`](https://sepolia.etherscan.io/address/0xD4c51Fb24A1Fa0d68241a58b9AF623d60313Fbbd) |
-
----
-
-## 🧪 Core Functions
-
-### `addLiquidity(...)`
-
-👅 Adds liquidity using both tokens. Mints LP tokens proportional to the deposit. Slippage protection with `amountAMin` and `amountBMin`.
-
-### `removeLiquidity(...)`
-
-👄 Burns LP tokens and returns the proportional amounts of both tokens. Enforces minimum output thresholds.
-
-### `swapExactTokensForTokens(...)`
-
-🔄 Swaps an exact input amount of one token for the maximum possible output of the other.
-
-### `getAmountOut(...)`
-
-📊 Calculates the output token amount using the constant product formula.
-
-### `getPrice(...)`
-
-💱 Returns the current price between `tokenA` and `tokenB`, normalized to 18 decimals.
-
-### `getReserves()`
-
-🛆 Retrieves current token reserves.
-
----
-
-## 🧾 Example Usage
+### ✅ Add Liquidity
 
 ```solidity
-SimpleSwap pool = new SimpleSwap(address(tokenA), address(tokenB));
+function addLiquidity(
+  address tokenA,
+  address tokenB,
+  uint amountADesired,
+  uint amountBDesired,
+  uint amountAMin,
+  uint amountBMin,
+  address to,
+  uint deadline
+) external returns (uint amountA, uint amountB, uint liquidity)
+```
 
-pool.addLiquidity(
-    address(tokenA),
-    address(tokenB),
-    1000 ether,
-    1000 ether,
-    900 ether,
-    900 ether,
-    msg.sender,
-    block.timestamp + 300
-);
+### ✅ Remove Liquidity
 
-pool.swapExactTokensForTokens(
-    100 ether,
-    90 ether,
-    new address[](2) { tokenA, tokenB },
-    msg.sender,
-    block.timestamp + 300
-);
+```solidity
+function removeLiquidity(
+  address tokenA,
+  address tokenB,
+  uint liquidity,
+  uint amountAMin,
+  uint amountBMin,
+  address to,
+  uint deadline
+) external returns (uint amountA, uint amountB)
+```
+
+### 🔄 Swap Tokens
+
+```solidity
+function swapExactTokensForTokens(
+  uint amountIn,
+  uint amountOutMin,
+  address[] calldata path,
+  address to,
+  uint deadline
+) external
+```
+
+### 📈 Get Price
+
+```solidity
+function getPrice(address tokenA, address tokenB) external view returns (uint price)
+```
+
+### 🔍 Estimate Output Amount
+
+```solidity
+function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut)
 ```
 
 ---
 
-## 👨‍💼 Author
+## 👨‍🎓 Author
 
-Developed by **Walter Liendo**
-📄 Licensed under the [MIT License](https://opensource.org/licenses/MIT)
+**Walter Liendo**  
+*Student at [EthKipu](https://campus.ethkipu.org/)*  
+📧 walter.liendo@gmail.com
 
 ---
+
+## 📄 License
+
+MIT  
+Smart contract code is open source and free to use under the [MIT License](https://opensource.org/licenses/MIT).
